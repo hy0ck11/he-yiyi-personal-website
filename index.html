@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>何奕奕 | 韩系温柔个人主页</title>
+    <style>
+        /* ---------- RESET & 全局变量 ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --sky-blue: #c2e0f0;
+            --cream: #fffaf2;
+            --soft-gray: #f5f2ed;
+            --card-bg: rgba(255, 253, 248, 0.92);
+            --btn-blue: #cbe6fe;
+            --btn-pink: #ffe0d6;
+            --shadow-sm: 0 12px 28px -10px rgba(100, 120, 140, 0.12);
+            --shadow-hover: 0 24px 38px -14px rgba(90, 110, 130, 0.22);
+            --border-radius-card: 32px;
+            --border-radius-btn: 60px;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', system-ui, sans-serif;
+            background: linear-gradient(165deg, #cae9ff 0%, #fff9ef 100%);
+            color: #4e6072;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            line-height: 1.45;
+        }
+
+        /* 自定义滚动条 - 保持干净 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0ede8;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #bdd9ef;
+            border-radius: 10px;
+        }
+
+        /* ---------- 漂浮装饰 (超缓慢+左右晃动) ---------- */
+        .deco-floating {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            font-size: 2rem;
+            opacity: 0.4;
+            user-select: none;
+            animation: floatShift 14s infinite ease-in-out;
+        }
+        /* 各装饰品随机位置 */
+        .deco-1 { top: 8%; left: 2%; font-size: 3.5rem; animation-duration: 16s; animation-delay: 0s; }
+        .deco-2 { bottom: 12%; right: 3%; font-size: 3rem; animation-duration: 18s; animation-delay: -3s; }
+        .deco-3 { top: 22%; right: 5%; font-size: 2.2rem; animation-duration: 15s; animation-delay: -1s; }
+        .deco-4 { bottom: 20%; left: 4%; font-size: 2rem; animation-duration: 17s; animation-delay: -5s; }
+        .deco-5 { top: 65%; left: 1%; font-size: 1.6rem; animation-duration: 19s; animation-delay: -2s; opacity: 0.3; }
+        .deco-6 { bottom: 28%; right: 2%; font-size: 1.9rem; animation-duration: 14s; animation-delay: -4s; opacity: 0.35; }
+        .deco-7 { top: 45%; right: 7%; font-size: 1.8rem; animation-duration: 20s; animation-delay: -1.5s; }
+
+        @keyframes floatShift {
+            0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+            40% { transform: translateY(-10px) translateX(3px) rotate(2deg); }
+            70% { transform: translateY(5px) translateX(-2px) rotate(-1deg); }
+            100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* ---------- 首屏占满可视窗口 ---------- */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        /* 韩系花式标题：仅用于问候语中的“你好！”和板块标题，占比＜20% */
+        .cute-accent {
+            font-family: 'Fredoka One', 'Comic Neue', 'Pretendard', cursive;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+
+        .greeting {
+            font-size: 3.2rem;
+            font-weight: 500;
+            color: #5b7f96;
+            margin-bottom: 2rem;
+        }
+        .greeting .cute-accent {
+            font-size: 4rem;
+            background: linear-gradient(125deg, #98b9ce, #c6a7b5);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        /* 头像优化：正方形 + 精致边框 + 实际图片 */
+        .avatar-wrapper {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #ffffffdd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.2rem;
+            border: 2px solid #c2d9ee;
+            transition: transform 0.2s ease;
+            overflow: hidden;
+        }
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .name {
+            font-size: 2rem;
+            font-weight: 520;
+            margin: 0.5rem 0 0.2rem;
+            letter-spacing: -0.2px;
+        }
+        .school {
+            font-size: 1rem;
+            background: rgba(255, 250, 240, 0.7);
+            backdrop-filter: blur(5px);
+            padding: 0.4rem 1.4rem;
+            border-radius: 40px;
+            font-weight: 450;
+            color: #5b6e7e;
+        }
+
+        /* 引导按钮 (首屏) */
+        .btn-primary {
+            margin-top: 2.5rem;
+            background: var(--btn-blue);
+            border: 1px solid #e2edf5;
+            padding: 0.85rem 2.6rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: var(--border-radius-btn);
+            color: #4f6a80;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 5px 12px rgba(160, 190, 210, 0.2);
+            font-family: inherit;
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+        .btn-primary:hover {
+            background: var(--btn-pink);
+            border-color: #ffe0cf;
+            color: #7a6258;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 18px -8px rgba(170, 130, 110, 0.2);
+        }
+
+        /* ---------- 四大功能板块 Grid ---------- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0 3rem;
+        }
+        /* 卡片通用样式：大圆角+阴影过渡+上浮悬停 */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(2px);
+            border-radius: var(--border-radius-card);
+            padding: 1.8rem 1.6rem 2rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.32s cubic-bezier(0.2, 0, 0, 1);
+            cursor: pointer;
+            border: 1px solid rgba(255, 248, 235, 0.9);
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+            background: #fffef9;
+        }
+        /* 板块标题 花式圆体 */
+        .card h3 {
+            font-family: 'Fredoka One', 'Comic Neue', 'Pretendard', cursive;
+            font-size: 1.85rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #64879e;
+            border-left: 4px solid #fbcbb5;
+            padding-left: 0.8rem;
+            letter-spacing: -0.2px;
+        }
+        .card p, .card ul {
+            font-size: 0.95rem;
+            color: #5f7486;
+            line-height: 1.5;
+        }
+        .card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .card li {
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .skill-badge {
+            background: #ecf5fa;
+            border-radius: 40px;
+            padding: 0.2rem 0.9rem;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin-right: 6px;
+            margin-top: 6px;
+        }
+
+        /* 滚动淡入动画 (渐进式) */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(26px);
+            transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.3, 1), transform 0.7s ease;
+        }
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ---------- 弹窗 (ins风 轻量 圆角 + 淡入缩放) ---------- */
+        .modal-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(110, 115, 110, 0.3);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+        }
+        .modal-mask.active {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.25s ease, visibility 0s linear 0s;
+        }
+        .modal-card {
+            background: #fffffffa;
+            max-width: 560px;
+            width: 90%;
+            border-radius: 44px;
+            padding: 1.6rem 2rem 2rem;
+            box-shadow: 0 30px 45px -20px rgba(0,0,0,0.25);
+            transform: scale(0.92) translateY(12px);
+            transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.2s;
+            opacity: 0;
+            border: 1px solid #ffefdf;
+        }
+        .active .modal-card {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid #f6e5d8;
+            padding-bottom: 0.6rem;
+            margin-bottom: 1.2rem;
+        }
+        .modal-header h4 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.7rem;
+            color: #6f8ea2;
+            font-weight: 500;
+        }
+        .close-modal-btn {
+            background: #f2e5db;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #9b7f6e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .close-modal-btn:hover {
+            background: #ffcdb8;
+            color: #6f4c3a;
+            transform: scale(0.95);
+        }
+        .modal-body {
+            max-height: 58vh;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        /* 照片通用样式 (圆角+浅阴影) */
+        .ins-photo {
+            border-radius: 18px;
+            box-shadow: 0 8px 16px -6px rgba(0,0,0,0.08);
+            background: #faf0e4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.1s;
+        }
+        .single-portrait {
+            width: 100%;
+            padding: 1rem 0;
+            font-size: 1rem;
+            background: #f7ecdf;
+            border-radius: 28px;
+            margin: 12px 0;
+            text-align: center;
+            color: #b8a48c;
+            overflow: hidden;
+        }
+        .single-portrait img {
+            width: 100%;
+            max-height: 280px;
+            object-fit: cover;
+            border-radius: 24px;
+            display: block;
+        }
+        .gallery-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 1rem 0;
+        }
+        .gallery-item {
+            background: #f6eadf;
+            border-radius: 24px;
+            padding: 0.8rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            transition: 0.1s;
+            overflow: hidden;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 18px;
+            display: block;
+        }
+        .gallery-item span {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: #8f7a68;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            font-size: 0.75rem;
+            opacity: 0.65;
+            color: #6a7c8b;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 700px) {
+            .container {
+                padding: 0 1.2rem 3rem;
+            }
+            .greeting { font-size: 2.2rem; }
+            .greeting .cute-accent { font-size: 2.8rem; }
+            .card h3 { font-size: 1.5rem; }
+            .features-grid { gap: 1.2rem; }
+            .gallery-item img {
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 手绘装饰元素：小云朵、雏菊、涂鸦线条超缓慢漂浮 -->
+<div class="deco-floating deco-1">☁️</div>
+<div class="deco-floating deco-2">🌼</div>
+<div class="deco-floating deco-3">✧ ～</div>
+<div class="deco-floating deco-4">🌼</div>
+<div class="deco-floating deco-5">〰️✎</div>
+<div class="deco-floating deco-6">☁️✨</div>
+<div class="deco-floating deco-7">✧˖°.</div>
+
+<div class="container">
+    <!-- 首屏 hero 区域 占满视窗 -->
+    <section class="hero" id="heroSection">
+        <div class="greeting">
+            <span class="cute-accent">你好！</span> 我是何奕奕
+        </div>
+        <div class="avatar-wrapper">
+            <img class="avatar-img" src="https://ftp.mioz.cn/test/2026/03/31/1774963183.JPG" alt="何奕奕头像">
+        </div>
+        <div class="name">何奕奕</div>
+        <div class="school">深圳大学 · 网络与新媒体 (视听传播方向)</div>
+        <button class="btn-primary" id="scrollToFeaturesBtn">了解我</button>
+    </section>
+
+    <!-- 四大功能区块 容器 -->
+    <div id="featuresAnchor">
+        <div class="features-grid">
+            <!-- 个人简介 -->
+            <div class="card scroll-reveal" data-modal="intro">
+                <h3>📖 个人简介</h3>
+                <p><strong>何奕奕</strong> | 2006.5.19<br>深圳大学 · 网络与新媒体专业视听传播方向<br>来自广东中山</p>
+                <p>🎹 弹钢琴 | 💃 Jazz | 📸 摄影 | 🎵 听音乐 | ✈️ 旅行<br>✨ MBTI: ENFP</p>
+                <p style="margin-top: 10px;">热爱记录生活，用镜头与文字传递温度，在数字媒体领域持续探索。</p>
+            </div>
+            <!-- 爱好与技能 -->
+            <div class="card scroll-reveal" data-modal="hobby">
+                <h3>🎨 爱好与技能</h3>
+                <ul>
+                    <li>🎹 钢琴：中国音乐学院十级、乐理三级；英国皇家音乐学院演奏级八级、乐理五级</li>
+                    <li>🎨 美术：国画四级</li>
+                    <li>💃 舞蹈：Jazz学习四年</li>
+                    <li>🗣️ 语言：韩语TOPIK 3级（系统学习一年半）</li>
+                    <li>📱 自媒体：微博原创视频博主黄V认证，多条图文阅读量200w+，全网粉丝5000+</li>
+                </ul>
+                <div style="margin-top: 10px;">
+                    <span class="skill-badge">#尤克里里</span>
+                    <span class="skill-badge">#吉他自学中</span>
+                    <span class="skill-badge">#内容创作者</span>
+                </div>
+            </div>
+            <!-- 活动经历 -->
+            <div class="card scroll-reveal" data-modal="activity">
+                <h3>📸 活动经历</h3>
+                <p>✨ 十五运会闭幕式仪式志愿者，登上闭幕式直播舞台<br>💃 舞蹈社团ebank成员，参与校园迎新晚会、社团嘉年华演出<br>🏆 深圳大学2025年院际舞蹈大赛银奖<br>🌏 2026年秋季公费派出至高丽大学交换学习</p>
+            </div>
+            <!-- 联系方式 -->
+            <div class="card scroll-reveal" data-modal="contact">
+                <h3>📮 联系方式</h3>
+                <p>📞 电话：18923319630<br>💬 微信：hOOOpixx<br>📧 邮箱：2991562652@qq.com<br>📱 小红书/B站：@倒带馅饼_<br>✨ 欢迎交流合作，一起探索创意世界～</p>
+            </div>
+        </div>
+    </div>
+    <footer>©2026 个人主页 | 何奕奕 ｜ 温柔记录，自在生长 ✨</footer>
+</div>
+
+<!-- 弹窗结构（独立悬浮） -->
+<div id="globalModal" class="modal-mask">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h4 id="modalDynamicTitle"></h4>
+            <button class="close-modal-btn" id="modalCloseBtn">✕</button>
+        </div>
+        <div class="modal-body" id="modalDynamicBody"></div>
+    </div>
+</div>
+
+<script>
+    (function(){
+        // ---------- 弹窗内容配置（含真实图片链接，符合圆角+浅阴影）----------
+        const modalData = {
+            intro: {
+                title: "🍃 个人简介 · 何奕奕",
+                html: `
+                    <div class="ins-photo single-portrait">
+                        <img src="https://ftp.mioz.cn/test/2026/03/31/1774963357.JPG" alt="何奕奕生活照">
+                    </div>
+                    <p><strong>姓名：</strong>何奕奕<br>
+                    <strong>生日：</strong>2006.5.19<br>
+                    <strong>学校：</strong>深圳大学<br>
+                    <strong>专业：</strong>网络与新媒体专业视听传播方向<br>
+                    <strong>家乡：</strong>广东中山<br>
+                    <strong>兴趣爱好：</strong>弹钢琴、跳jazz、摄影、听音乐、旅行<br>
+                    <strong>MBTI：</strong>ENFP</p>
+                    <p>🎐 热爱用镜头捕捉生活细节，用文字与影像讲述故事。相信真诚的创作能连接世界，在数字媒体领域不断探索更多可能性。</p>
+                `
+            },
+            hobby: {
+                title: "🎀 爱好与技能",
+                html: `
+                    <p><strong>🎹 音乐：</strong>中国音乐学院钢琴十级、乐理三级；英国皇家音乐学院钢琴演奏级八级、乐理五级；自学尤克里里和吉他。<br>
+                    <strong>🎨 美术：</strong>国画四级；<br>
+                    <strong>💃 舞蹈：</strong>学习Jazz四年；<br>
+                    <strong>🗣️ 语言：</strong>系统学习韩语一年半，TOPIK 3级水平；<br>
+                    <strong>📱 自媒体运营：</strong>微博原创视频博主黄V认证，产出多条阅读量破200w图文博文，全网粉丝5000+。</p>
+                    <div style="background: #fef3e9; border-radius: 28px; padding: 14px; margin-top: 16px;">
+                        🌟 持续探索内容创作与跨文化表达，期待用作品传递温柔而有力的声音。
+                    </div>
+                `
+            },
+            activity: {
+                title: "🌼 活动经历 · 高光时刻",
+                html: `
+                    <p>✨ <strong>十五运会闭幕式仪式志愿者</strong> — 登上闭幕式直播舞台，见证体育盛事<br>
+                    💃 <strong>舞蹈社团ebank成员</strong> — 参与校园迎新晚会、社团嘉年华多场演出<br>
+                    🏆 <strong>深圳大学2025年院际舞蹈大赛</strong> — 荣获银奖<br>
+                    🌏 <strong>2026年秋季公派交换</strong> — 高丽大学交换学习，拓展国际视野</p>
+                    <!-- 四张活动照片占位符 2x2网格 真实图片链接 -->
+                    <div class="gallery-2x2">
+                        <div class="gallery-item">
+                            <img src="https://ftp.mioz.cn/test/2026/03/31/1774963449.JPG" alt="十五运会志愿活动">
+                            <span>十五运会志愿时刻</span>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://ftp.mioz.cn/test/2026/03/31/1774963544.JPG" alt="舞蹈大赛现场">
+                            <span>舞蹈大赛银奖</span>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://ftp.mioz.cn/test/2026/03/31/1774963611.JPG" alt="社团嘉年华演出">
+                            <span>ebank社团演出</span>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://ftp.mioz.cn/test/2026/03/31/1774963675.JPG" alt="高丽大学交换">
+                            <span>高丽大学交换</span>
+                        </div>
+                    </div>
+                    <p style="margin-top: 8px;">📸 每一次经历都是成长的注脚，持续热爱，持续发光。</p>
+                `
+            },
+            contact: {
+                title: "💌 联系方式 · 保持联结",
+                html: `
+                    <p>📞 <strong>电话：</strong>18923319630<br>
+                    💬 <strong>微信：</strong>hOOOpixx<br>
+                    📧 <strong>邮箱：</strong>2991562652@qq.com<br>
+                    📱 <strong>小红书/B站：</strong>@倒带馅饼_<br>
+                    🌐 微博原创视频博主 · 全网粉丝5000+</p>
+                    <div style="background: #eaf2f9; border-radius: 28px; padding: 16px; margin-top: 18px; text-align:center;">
+                        🕊️ 欢迎约拍、合作、交流创意～ 期待与你相遇！
+                    </div>
+                `
+            }
+        };
+
+        // DOM 元素
+        const knowBtn = document.getElementById('scrollToFeaturesBtn');
+        const cards = document.querySelectorAll('.card');
+        const modalMask = document.getElementById('globalModal');
+        const modalTitle = document.getElementById('modalDynamicTitle');
+        const modalBody = document.getElementById('modalDynamicBody');
+        const closeModalBtn = document.getElementById('modalCloseBtn');
+
+        // 1. 平滑滚动：点击了解我滚动至四大区块起始处
+        if(knowBtn) {
+            knowBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const featuresSection = document.getElementById('featuresAnchor');
+                if(featuresSection) {
+                    featuresSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        }
+
+        // 2. 弹窗逻辑：打开弹窗（带淡入缩放+背景遮罩）
+        function openModal(modalKey) {
+            const content = modalData[modalKey];
+            if(content) {
+                modalTitle.innerText = content.title;
+                modalBody.innerHTML = content.html;
+                modalMask.classList.add('active');
+            } else {
+                console.warn('没有对应弹窗内容');
+            }
+        }
+
+        function closeModalFunc() {
+            modalMask.classList.remove('active');
+        }
+
+        // 给每个卡片绑定点击 (触发对应弹窗)
+        cards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const modalType = card.getAttribute('data-modal');
+                if(modalType && modalData[modalType]) {
+                    openModal(modalType);
+                } else {
+                    openModal('intro');
+                }
+            });
+        });
+
+        // 关闭弹窗事件 (关闭按钮 + 点击遮罩)
+        if(closeModalBtn) closeModalBtn.addEventListener('click', closeModalFunc);
+        modalMask.addEventListener('click', (e) => {
+            if(e.target === modalMask) closeModalFunc();
+        });
+
+        // 3. 滚动淡入+位移 Intersection Observer (渐进式)
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2, rootMargin: "0px 0px -20px 0px" });
+        
+        revealElements.forEach(el => observer.observe(el));
+
+        window.addEventListener('load', () => {
+            revealElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if(rect.top < window.innerHeight - 80) {
+                    el.classList.add('revealed');
+                    observer.unobserve(el);
+                }
+            });
+        });
+
+        // 4. 按钮按压收缩效果
+        const allBtns = document.querySelectorAll('.btn-primary, .close-modal-btn');
+        allBtns.forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.style.transform = 'scale(0.96)';
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.style.transform = '';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = '';
+            });
+        });
+    })();
+</script>
+</body>
+</html>
